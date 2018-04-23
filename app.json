@@ -1,16 +1,5 @@
 {
   "expo": {
-    "sdkVersion": "26.0.0",
-    "orientation": "portrait",
-    "name": "Whatsapp-clone",
-    "description": "project for learning react native",
-    "slug": "Whatsapp-clone",
-    "version": "1.0",
-    "ios": {
-      "bundleIdentifier": "org.evanfung.whatsappclone"
-    },
-    "android": {
-      "package": "org.evanfung.whatsappclone"
-    }
+    "sdkVersion": "26.0.0"
   }
 }
