@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { View, Text } from "react-native";
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
 import {
   Container,
   Header,
@@ -13,24 +13,12 @@ import {
   Item,
   Input,
   Form
-} from "native-base";
+} from 'native-base';
 
 class Signin extends Component {
   render() {
     return (
       <Container>
-        <Header>
-          <Left>
-            <Button>
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
-          <Body>
-            <Title>Rounded</Title>
-          </Body>
-          <Right />
-        </Header>
-
         <Content padder>
           <Form>
             <Item rounded>
