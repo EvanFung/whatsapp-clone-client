@@ -6,16 +6,33 @@ import { connect } from 'react-redux';
 import agent from '../agent';
 import { LOGIN, UPDATE_FIELD_AUTH } from '../constants/actionTypes';
 class Signin extends Component {
+  constructor(props) {
+    super(props);
+    this.changeEmail = value => this.props.onChangeEmail(value);
+    this.changePassword = value => this.props.onChangePassword(value);
+  }
+
   render() {
+    const email = this.props.email;
+    const password = this.props.password;
     return (
       <Container>
         <Content padder>
           <Form>
             <Item rounded>
-              <Input placeholder="Username" />
+              <Input
+                placeholder="Username"
+                onChangeText={this.changeEmail}
+                value={email}
+              />
             </Item>
             <Item rounded>
-              <Input placeholder="Password" />
+              <Input
+                placeholder="Password"
+                onChangeText={this.changePassword}
+                secureTextEntry
+                value={password}
+              />
             </Item>
             {/* <ActivityIndicator /> */}
             <GradientButton>LOGIN</GradientButton>
@@ -35,4 +52,4 @@ const mapDispatchToProps = dispatch => ({
   onSubmit: (email, password) =>
     dispatch({ type: LOGIN, payload: agent.Auth.login(email, password) })
 });
-export default Signin;
+export default connect(mapStateToProps, mapDispatchToProps)(Signin);
