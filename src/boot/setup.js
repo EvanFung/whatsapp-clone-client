@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleProvider } from 'native-base';
 import Signin from '../screens/Signin.screen';
 import App from '../App';
-import { StyleSheet, Text, View } from 'react-native';
 import { AppLoading } from 'expo';
 import getTheme from '../../native-base-theme/components';
 import variables from '../../native-base-theme/variables/platform';
@@ -30,7 +29,7 @@ export default class Setup extends React.Component {
     }
     return (
       <StyleProvider style={getTheme(variables)}>
-        <Signin />
+        <App />
       </StyleProvider>
     );
   }

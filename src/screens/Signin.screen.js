@@ -1,20 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-import {
-  Container,
-  Header,
-  Title,
-  Content,
-  Button,
-  Icon,
-  Body,
-  Left,
-  Right,
-  Item,
-  Input,
-  Form
-} from 'native-base';
-
+import { Container, Content, Button, Item, Input, Form } from 'native-base';
+import GradientButton from '../components/GradientButton';
 class Signin extends Component {
   render() {
     return (
@@ -22,8 +9,12 @@ class Signin extends Component {
         <Content padder>
           <Form>
             <Item rounded>
-              <Input placeholder="Rounded Textbox" />
+              <Input placeholder="Username" />
             </Item>
+            <Item rounded>
+              <Input placeholder="Password" />
+            </Item>
+            <GradientButton>LOGIN</GradientButton>
           </Form>
         </Content>
       </Container>
