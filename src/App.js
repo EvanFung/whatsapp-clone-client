@@ -5,6 +5,7 @@ import { StackNavigator, SwitchNavigator } from 'react-navigation';
 import Boot from './boot/setup';
 import { StyleSheet, View } from 'react-native';
 import { Provider } from 'react-redux';
+import { store } from './store';
 const AppNavigator = StackNavigator({
   Signin: { screen: Signin }
 });
@@ -12,7 +13,7 @@ const AppNavigator = StackNavigator({
 export default class App extends React.Component {
   render() {
     return (
-      <Provider>
+      <Provider store={store}>
         <Root>
           <AppNavigator />
         </Root>
