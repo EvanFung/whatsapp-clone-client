@@ -1,23 +1,45 @@
 import React from 'react';
 import { Root } from 'native-base';
-import Signin from './screens/Signin.screen';
-import { StackNavigator, SwitchNavigator } from 'react-navigation';
-import Boot from './boot/setup';
-import { StyleSheet, View } from 'react-native';
 import { Provider } from 'react-redux';
 import { store } from './store';
-const AppNavigator = StackNavigator({
-  Signin: { screen: Signin }
-});
-
-export default class App extends React.Component {
+import { Font, AppLoading } from 'expo';
+import { StyleProvider } from 'native-base';
+import getTheme from '../native-base-theme/components';
+import variables from '../native-base-theme/variables/platform';
+import MainAppNavigator from './screens';
+import Signin from './screens/Signin.screen';
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      isReady: false
+    };
+  }
+  componentDidMount() {
+    this.loadFonts();
+  }
+  async loadFonts() {
+    await Font.loadAsync({
+      Roboto: require('native-base/Fonts/Roboto.ttf'),
+      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+      Ionicons: require('@expo/vector-icons/fonts/Ionicons.ttf')
+    });
+    this.setState({ isReady: true });
+  }
   render() {
+    if (!this.state.isReady) {
+      return <AppLoading />;
+    }
     return (
       <Provider store={store}>
-        <Root>
-          <AppNavigator />
-        </Root>
+        <StyleProvider style={getTheme(variables)}>
+          <Root>
+            <MainAppNavigator />
+          </Root>
+        </StyleProvider>
       </Provider>
     );
   }
 }
+
+export default App;

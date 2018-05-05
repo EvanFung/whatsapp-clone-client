@@ -7,8 +7,10 @@ import agent from '../agent';
 import {
   LOGIN,
   UPDATE_FIELD_AUTH,
-  LOGIN_PAGE_UNLOADED
+  LOGIN_PAGE_UNLOADED,
+  APP_LOAD
 } from '../constants/actionTypes';
+import { AsyncStorage } from 'react-native';
 
 class Signin extends Component {
   constructor(props) {
@@ -23,6 +25,12 @@ class Signin extends Component {
   componentWillUnmount() {
     this.props.onUnload();
   }
+  componentDidMount = () => {
+    const token = AsyncStorage.getItem('jwt');
+
+    // this.props.navigation.navigate(token ? 'AppNavigator' : 'AuthNavigator');
+  };
+
   render() {
     const email = this.props.email;
     const password = this.props.password;
@@ -64,6 +72,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
   onSubmit: (email, password) =>
     dispatch({ type: LOGIN, payload: agent.Auth.login(email, password) }),
-  onUnload: () => dispatch({ type: LOGIN_PAGE_UNLOADED })
+  onUnload: () => dispatch({ type: LOGIN_PAGE_UNLOADED }),
+  onLoad: () => dispatch({ type: APP_LOAD, payload, token, skipTracking: true })
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Signin);

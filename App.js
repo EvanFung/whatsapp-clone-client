@@ -1,6 +1,6 @@
 import './ReactotronConfig';
 import React from 'react';
-import App from './src/boot/setup';
+import App from './src/App';
 
 const StartApp = () => <App />;
 
