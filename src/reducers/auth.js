@@ -1,4 +1,10 @@
-import { LOGIN, LOGOUT, UPDATE_FIELD_AUTH } from '../constants/actionTypes';
+import {
+  LOGIN,
+  LOGOUT,
+  UPDATE_FIELD_AUTH,
+  ASYNC_START,
+  REGISTER
+} from '../constants/actionTypes';
 
 export default (state = {}, action) => {
   switch (action.type) {
@@ -13,6 +19,14 @@ export default (state = {}, action) => {
         ...state,
         [action.key]: action.value
       };
+    case ASYNC_START:
+      if (action.subtype === LOGIN || action.subtype === REGISTER) {
+        return {
+          ...state,
+          inProgress: true
+        };
+      }
+      break;
     default:
       return state;
   }
