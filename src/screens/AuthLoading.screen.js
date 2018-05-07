@@ -2,28 +2,32 @@ import React, { Component } from 'react';
 import { Container, Content, Spinner, Header } from 'native-base';
 import { AsyncStorage } from 'react-native';
 import agent from '../agent';
+import { connect } from 'react-redux';
+import { APP_LOAD } from '../constants/actionTypes';
 class AuthLoading extends Component {
   componentDidMount() {
-    this.getToken();
-  }
-
-  async getToken() {
-    const token = await AsyncStorage.getItem('jwt');
-    if (token) {
-      agent.setToken(token);
-      this.props.navigation.navigate('AppNavigator');
-    } else {
-      this.props.navigation.navigate('AuthNavigator');
-    }
+    AsyncStorage.getItem('jwt').then(token => {
+      if (token) {
+        agent.setToken(token);
+        this.props.navigation.navigate('AppNavigator');
+      }
+    });
   }
   render() {
     return (
       <Container>
         <Content padder>
-          <Spinner color="green" />
+          <Spinner />
         </Content>
       </Container>
     );
   }
 }
-export default AuthLoading;
+
+const mapStateToProps = state => ({ ...state.auth });
+const mapDispatchToProps = dispatch => ({
+  onLoad: (payload, token) => {
+    dispatch({ type: APP_LOAD, payload, token, skipTracking: true });
+  }
+});
+export default connect(mapStateToProps, mapDispatchToProps)(AuthLoading);

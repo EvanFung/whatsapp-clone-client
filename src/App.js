@@ -8,7 +8,7 @@ import getTheme from '../native-base-theme/components';
 import variables from '../native-base-theme/variables/platform';
 import MainAppNavigator from './screens';
 import { AsyncStorage } from 'react-native';
-AsyncStorage.clear();
+// AsyncStorage.clear();
 class App extends React.Component {
   constructor() {
     super();

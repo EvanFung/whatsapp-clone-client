@@ -20,7 +20,7 @@ class Signin extends Component {
     this.submitForm = (email, password) => event => {
       event.preventDefault();
       this.props.onSubmit(email, password);
-      this.props.navigation.navigate('AppNavigator');
+      // this.props.navigation.navigate('AppNavigator');
     };
   }
   componentWillUnmount() {
@@ -68,7 +68,6 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
   onSubmit: (email, password) =>
     dispatch({ type: LOGIN, payload: agent.Auth.login(email, password) }),
-  onUnload: () => dispatch({ type: LOGIN_PAGE_UNLOADED }),
-  onLoad: () => dispatch({ type: APP_LOAD, payload, token, skipTracking: true })
+  onUnload: () => dispatch({ type: LOGIN_PAGE_UNLOADED })
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Signin);

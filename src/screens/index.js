@@ -28,13 +28,14 @@ const MainAppRoute = SwitchNavigator(
 );
 
 class MainAppNavigator extends Component {
-  componentDidMount() {
-    const token = AsyncStorage.getItem('jwt');
-    if (token) {
-      agent.setToken(token);
-    }
-    this.props.onLoad(token ? agent.Auth.current() : null, token);
-  }
+  componentDidMount = () => {
+    AsyncStorage.getItem('jwt').then(token => {
+      if (token) {
+        agent.setToken(token);
+      }
+      this.props.onLoad(token ? agent.Auth.current() : null, token);
+    });
+  };
 
   render() {
     if (this.props.appLoaded) {

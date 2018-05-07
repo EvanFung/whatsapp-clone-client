@@ -1,4 +1,10 @@
-import { APP_LOAD, LOGIN, LOGOUT, REGISTER } from '../constants/actionTypes';
+import {
+  APP_LOAD,
+  LOGIN,
+  LOGOUT,
+  REGISTER,
+  LOGIN_PAGE_UNLOADED
+} from '../constants/actionTypes';
 
 const defaultState = {
   appName: 'Whatsapp clone',
@@ -12,7 +18,8 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         token: action.token || null,
-        appLoaded: true
+        appLoaded: true,
+        currentUser: action.payload ? action.payload.user : null
       };
     case LOGIN:
     case REGISTER:
@@ -21,6 +28,8 @@ export default (state = defaultState, action) => {
         token: action.error ? null : action.payload.user.token,
         currentUser: action.error ? null : action.payload.user
       };
+    case LOGIN_PAGE_UNLOADED:
+      return { ...state, viewChangeCounter: state.viewChangeCounter + 1 };
   }
 
   return state;

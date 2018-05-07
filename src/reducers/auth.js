@@ -3,7 +3,8 @@ import {
   LOGOUT,
   UPDATE_FIELD_AUTH,
   ASYNC_START,
-  REGISTER
+  REGISTER,
+  LOGIN_PAGE_UNLOADED
 } from '../constants/actionTypes';
 
 export default (state = {}, action) => {
@@ -27,6 +28,8 @@ export default (state = {}, action) => {
         };
       }
       break;
+    case LOGIN_PAGE_UNLOADED:
+      return {};
     default:
       return state;
   }
