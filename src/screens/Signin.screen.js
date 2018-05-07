@@ -20,16 +20,12 @@ class Signin extends Component {
     this.submitForm = (email, password) => event => {
       event.preventDefault();
       this.props.onSubmit(email, password);
+      this.props.navigation.navigate('AppNavigator');
     };
   }
   componentWillUnmount() {
     this.props.onUnload();
   }
-  componentDidMount = () => {
-    const token = AsyncStorage.getItem('jwt');
-
-    // this.props.navigation.navigate(token ? 'AppNavigator' : 'AuthNavigator');
-  };
 
   render() {
     const email = this.props.email;

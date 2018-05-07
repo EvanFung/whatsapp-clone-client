@@ -7,6 +7,7 @@ import { AppLoading } from 'expo';
 import agent from '../agent';
 import { connect } from 'react-redux';
 import { StackNavigator, SwitchNavigator } from 'react-navigation';
+import AuthLoading from './AuthLoading.screen';
 const AuthNavigator = StackNavigator({
   Signin: { screen: Signin }
 });
@@ -17,11 +18,12 @@ const AppNavigator = StackNavigator({
 
 const MainAppRoute = SwitchNavigator(
   {
+    AuthLoading: AuthLoading,
     AuthNavigator: AuthNavigator,
     AppNavigator: AppNavigator
   },
   {
-    initialRouteName: 'AuthNavigator'
+    initialRouteName: 'AuthLoading'
   }
 );
 

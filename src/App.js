@@ -7,7 +7,8 @@ import { StyleProvider } from 'native-base';
 import getTheme from '../native-base-theme/components';
 import variables from '../native-base-theme/variables/platform';
 import MainAppNavigator from './screens';
-import Signin from './screens/Signin.screen';
+import { AsyncStorage } from 'react-native';
+AsyncStorage.clear();
 class App extends React.Component {
   constructor() {
     super();
