@@ -8,7 +8,8 @@ import {
   LOGIN,
   UPDATE_FIELD_AUTH,
   LOGIN_PAGE_UNLOADED,
-  APP_LOAD
+  APP_LOAD,
+  REDIRECT
 } from '../constants/actionTypes';
 import { AsyncStorage } from 'react-native';
 
@@ -20,11 +21,18 @@ class Signin extends Component {
     this.submitForm = (email, password) => event => {
       event.preventDefault();
       this.props.onSubmit(email, password);
-      // this.props.navigation.navigate('AppNavigator');
     };
   }
   componentWillUnmount() {
     this.props.onUnload();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.redirectTo) {
+      console.log(nextProps.redirectTo);
+      this.props.navigation.navigate(nextProps.redirectTo);
+      this.props.onRedirect();
+    }
   }
 
   render() {
@@ -60,7 +68,10 @@ class Signin extends Component {
   }
 }
 
-const mapStateToProps = state => ({ ...state.auth });
+const mapStateToProps = state => ({
+  ...state.auth,
+  redirectTo: state.common.redirectTo
+});
 const mapDispatchToProps = dispatch => ({
   onChangeEmail: value =>
     dispatch({ type: UPDATE_FIELD_AUTH, key: 'email', value }),
@@ -68,6 +79,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
   onSubmit: (email, password) =>
     dispatch({ type: LOGIN, payload: agent.Auth.login(email, password) }),
-  onUnload: () => dispatch({ type: LOGIN_PAGE_UNLOADED })
+  onUnload: () => dispatch({ type: LOGIN_PAGE_UNLOADED }),
+  onRedirect: () => dispatch({ type: REDIRECT })
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Signin);

@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { Container, Content, Spinner, Header } from 'native-base';
 import { AsyncStorage } from 'react-native';
-import agent from '../agent';
 import { connect } from 'react-redux';
 import { APP_LOAD } from '../constants/actionTypes';
 class AuthLoading extends Component {
   componentDidMount() {
     AsyncStorage.getItem('jwt').then(token => {
       if (token) {
-        agent.setToken(token);
         this.props.navigation.navigate('AppNavigator');
+      } else {
+        this.props.navigation.navigate('AuthNavigator');
       }
     });
   }

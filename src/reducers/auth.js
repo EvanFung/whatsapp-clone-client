@@ -13,7 +13,7 @@ export default (state = {}, action) => {
       return {
         ...state,
         inProgress: false,
-        errors: action.error ? action.playload.errors : null
+        errors: action.error ? action.payload.errors : null
       };
     case UPDATE_FIELD_AUTH:
       return {
