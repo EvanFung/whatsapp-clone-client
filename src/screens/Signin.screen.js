@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
-import { Container, Content, Button, Item, Input, Form } from 'native-base';
+import {
+  Container,
+  Content,
+  Button,
+  Item,
+  Input,
+  Form,
+  Icon,
+  Toast
+} from 'native-base';
 import GradientButton from '../components/GradientButton';
 import { connect } from 'react-redux';
 import agent from '../agent';
@@ -35,29 +44,45 @@ class Signin extends Component {
     }
   }
 
+  renderToast() {
+    const errors = this.props.errors;
+    if (errors) {
+      Object.keys(errors).map(key => {
+        return Toast.show({
+          text: `${key} ${errors[key]}`,
+          buttonText: `OK`,
+          duration: 1000,
+          type: 'danger'
+        });
+      });
+    }
+  }
+
   render() {
-    const email = this.props.email;
-    const password = this.props.password;
+    const { email, password, errors, isProgress } = this.props;
     return (
       <Container>
         <Content padder>
           <Form>
-            <Item rounded>
+            <Item rounded error={errors ? true : false}>
               <Input
                 placeholder="Username"
                 onChangeText={this.changeEmail}
                 value={email}
               />
+              {errors ? <Icon name="close-circle" /> : null}
             </Item>
-            <Item rounded>
+            <Item rounded error={errors ? true : false}>
               <Input
                 placeholder="Password"
                 onChangeText={this.changePassword}
                 secureTextEntry
                 value={password}
               />
+              {errors ? <Icon name="close-circle" /> : null}
             </Item>
-            {/* <ActivityIndicator /> */}
+            {isProgress ? <ActivityIndicator /> : null}
+            {this.renderToast()}
             <GradientButton onPress={this.submitForm(email, password)}>
               LOGIN
             </GradientButton>

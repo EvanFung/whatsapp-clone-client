@@ -18,7 +18,8 @@ export default (state = {}, action) => {
     case UPDATE_FIELD_AUTH:
       return {
         ...state,
-        [action.key]: action.value
+        [action.key]: action.value,
+        errors: null
       };
     case ASYNC_START:
       if (action.subtype === LOGIN || action.subtype === REGISTER) {
