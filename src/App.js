@@ -9,6 +9,7 @@ import variables from '../native-base-theme/variables/platform';
 import MainAppNavigator from './screens';
 import { AsyncStorage } from 'react-native';
 AsyncStorage.clear();
+//load Font and theme style layer
 class App extends React.Component {
   constructor() {
     super();

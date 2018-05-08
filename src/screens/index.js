@@ -8,14 +8,15 @@ import agent from '../agent';
 import { connect } from 'react-redux';
 import { StackNavigator, SwitchNavigator } from 'react-navigation';
 import AuthLoading from './AuthLoading.screen';
+//Authentication navigator
 const AuthNavigator = StackNavigator({
   Signin: { screen: Signin }
 });
-
+//Home navigator
 const AppNavigator = StackNavigator({
   ChatList: { screen: ChatList }
 });
-
+//Entired app switchter
 const MainAppRoute = SwitchNavigator(
   {
     AuthLoading: AuthLoading,
