@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  TouchableOpacity,
+  StyleSheet
+} from 'react-native';
 import {
   Container,
   Content,
@@ -8,7 +14,8 @@ import {
   Input,
   Form,
   Icon,
-  Toast
+  Toast,
+  Footer
 } from 'native-base';
 import GradientButton from '../components/GradientButton';
 import { connect } from 'react-redux';
@@ -66,7 +73,7 @@ class Signin extends Component {
           <Form>
             <Item rounded error={errors ? true : false}>
               <Input
-                placeholder="Username"
+                placeholder="Email"
                 onChangeText={this.changeEmail}
                 value={email}
               />
@@ -88,6 +95,16 @@ class Signin extends Component {
             </GradientButton>
           </Form>
         </Content>
+        <Footer>
+          <View style={styles.textRow}>
+            <Text>Don't have an account?</Text>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Signup')}
+            >
+              <Text>Sign up now</Text>
+            </TouchableOpacity>
+          </View>
+        </Footer>
       </Container>
     );
   }
@@ -106,5 +123,16 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: LOGIN, payload: agent.Auth.login(email, password) }),
   onUnload: () => dispatch({ type: LOGIN_PAGE_UNLOADED }),
   onRedirect: () => dispatch({ type: REDIRECT })
+});
+
+const styles = StyleSheet.create({
+  footer: {
+    justifyContent: 'flex-start',
+    flex: 1
+  },
+  textRow: {
+    justifyContent: 'center',
+    flexDirection: 'row'
+  }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Signin);

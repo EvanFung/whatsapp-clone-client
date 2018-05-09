@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Signin from './Signin.screen';
+import Signup from './Signup.screen';
 import ChatList from './ChatList.screen';
 import { AsyncStorage } from 'react-native';
 import { APP_LOAD } from '../constants/actionTypes';
@@ -9,9 +10,15 @@ import { connect } from 'react-redux';
 import { StackNavigator, SwitchNavigator } from 'react-navigation';
 import AuthLoading from './AuthLoading.screen';
 //Authentication navigator
-const AuthNavigator = StackNavigator({
-  Signin: { screen: Signin }
-});
+const AuthNavigator = StackNavigator(
+  {
+    Signin: { screen: Signin },
+    Signup: { screen: Signup }
+  }
+  // {
+  //   headerMode: 'none'
+  // }
+);
 //Home navigator
 const AppNavigator = StackNavigator({
   ChatList: { screen: ChatList }
