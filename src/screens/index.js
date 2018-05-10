@@ -14,10 +14,10 @@ const AuthNavigator = StackNavigator(
   {
     Signin: { screen: Signin },
     Signup: { screen: Signup }
+  },
+  {
+    headerMode: 'none'
   }
-  // {
-  //   headerMode: 'none'
-  // }
 );
 //Home navigator
 const AppNavigator = StackNavigator({

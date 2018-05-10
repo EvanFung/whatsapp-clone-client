@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Container, Content, Form, Item, Input } from 'native-base';
+import GradientButton from '../components/GradientButton';
+
 class Signup extends Component {
   render() {
     return (
       <Container>
-        <Content>
+        <Content padder>
           <View style={{ alignItems: 'center' }}>
             {/* TODO: render icon here */}
             <Text>Registration</Text>
@@ -22,6 +24,7 @@ class Signup extends Component {
                 <Item rounded>
                   <Input placeholder="Password" />
                 </Item>
+                <GradientButton>Sign Up</GradientButton>
               </Form>
             </View>
             <View style={styles.footer}>

@@ -4,7 +4,9 @@ import {
   Text,
   ActivityIndicator,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  Dimensions,
+  Image
 } from 'react-native';
 import {
   Container,
@@ -28,7 +30,8 @@ import {
   REDIRECT
 } from '../constants/actionTypes';
 import { AsyncStorage } from 'react-native';
-
+import { scaleVertical, scale, scaleModerate } from '../utils/scale';
+import { FontAwesome } from '@expo/vector-icons';
 class Signin extends Component {
   constructor(props) {
     super(props);
@@ -39,6 +42,7 @@ class Signin extends Component {
       this.props.onSubmit(email, password);
     };
   }
+
   componentWillUnmount() {
     this.props.onUnload();
   }
@@ -65,13 +69,29 @@ class Signin extends Component {
     }
   }
 
+  renderBGImage(image) {
+    let contentHeight = scaleModerate(375, 1);
+    let height = Dimensions.get('window').height - contentHeight;
+    let width = Dimensions.get('window').width;
+    image = (
+      <Image
+        style={[styles.image, { height, width }]}
+        source={require('../assets/images/backgroundLoginV1.png')}
+      />
+    );
+    return image;
+  }
+
   render() {
     const { email, password, errors, isProgress } = this.props;
+    const image = this.renderBGImage();
     return (
-      <Container>
+      <Container style={styles.container}>
+        {image}
         <Content padder>
           <Form>
-            <Item rounded error={errors ? true : false}>
+            <Item rounded error={errors ? true : false} style={styles.input}>
+              <Icon name="user" type="FontAwesome" active />
               <Input
                 placeholder="Email"
                 onChangeText={this.changeEmail}
@@ -80,6 +100,7 @@ class Signin extends Component {
               {errors ? <Icon name="close-circle" /> : null}
             </Item>
             <Item rounded error={errors ? true : false}>
+              <Icon name="lock" type="FontAwesome" active />
               <Input
                 placeholder="Password"
                 onChangeText={this.changePassword}
@@ -94,17 +115,17 @@ class Signin extends Component {
               LOGIN
             </GradientButton>
           </Form>
-        </Content>
-        <Footer>
-          <View style={styles.textRow}>
-            <Text>Don't have an account?</Text>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Signup')}
-            >
-              <Text>Sign up now</Text>
-            </TouchableOpacity>
+          <View style={styles.footer}>
+            <View style={styles.textRow}>
+              <Text style={styles.primary3}>Don't have an account?</Text>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Signup')}
+              >
+                <Text style={styles.header6}>Sign up now</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </Footer>
+        </Content>
       </Container>
     );
   }
@@ -126,13 +147,36 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#ffffff'
+  },
+  input: {
+    marginTop: scaleVertical(10),
+    marginBottom: scaleVertical(10)
+  },
   footer: {
     justifyContent: 'flex-start',
-    flex: 1
+    flex: 1,
+    marginTop: scaleVertical(10)
   },
   textRow: {
     justifyContent: 'center',
     flexDirection: 'row'
+  },
+  image: {
+    resizeMode: 'cover',
+    marginBottom: scaleVertical(10)
+  },
+  icon: {
+    fontSize: scale(33)
+  },
+  primary3: {
+    fontSize: scale(15)
+  },
+  header6: {
+    fontSize: scale(15),
+    fontWeight: 'bold'
   }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Signin);
