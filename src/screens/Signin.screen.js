@@ -29,9 +29,7 @@ import {
   APP_LOAD,
   REDIRECT
 } from '../constants/actionTypes';
-import { AsyncStorage } from 'react-native';
 import { scaleVertical, scale, scaleModerate } from '../utils/scale';
-import { FontAwesome } from '@expo/vector-icons';
 class Signin extends Component {
   constructor(props) {
     super(props);
@@ -49,7 +47,6 @@ class Signin extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.redirectTo) {
-      console.log(nextProps.redirectTo);
       this.props.navigation.navigate(nextProps.redirectTo);
       this.props.onRedirect();
     }
@@ -69,11 +66,11 @@ class Signin extends Component {
     }
   }
 
-  renderBGImage(image) {
+  renderBGImage() {
     let contentHeight = scaleModerate(375, 1);
     let height = Dimensions.get('window').height - contentHeight;
     let width = Dimensions.get('window').width;
-    image = (
+    let image = (
       <Image
         style={[styles.image, { height, width }]}
         source={require('../assets/images/backgroundLoginV1.png')}
@@ -121,7 +118,7 @@ class Signin extends Component {
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Signup')}
               >
-                <Text style={styles.header6}>Sign up now</Text>
+                <Text style={styles.header6}> Sign up now</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -180,3 +177,4 @@ const styles = StyleSheet.create({
   }
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Signin);
+// export default Signin;
