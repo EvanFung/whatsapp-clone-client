@@ -4,7 +4,18 @@ import { Container, Content, Form, Item, Input, Icon } from 'native-base';
 import GradientButton from '../components/GradientButton';
 import CustomStatusBar from '../components/CustomStatusBar';
 import { scaleVertical, scale } from '../utils/scale';
+
+import { connect } from 'react-redux';
+import {
+  REGISTER,
+  REGISTER_PAGE_UNLOADED,
+  UPDATE_FIELD_AUTH
+} from '../constants/actionTypes';
+import agent from '../agent';
 class Signup extends Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
       <Container style={styles.container}>
@@ -15,13 +26,17 @@ class Signup extends Component {
               source={require('../assets/images/logo.png')}
               style={styles.image}
             />
-            <Text>Registration</Text>
+            <Text style={styles.header2}>Registration</Text>
           </View>
           <View style={styles.content}>
             <View>
               <Form>
                 <Item rounded style={styles.input}>
                   <Icon name="user" type="FontAwesome" active />
+                  <Input placeholder="Username" />
+                </Item>
+                <Item rounded style={styles.input}>
+                  <Icon name="email" type="MaterialCommunityIcons" active />
                   <Input placeholder="Email" />
                 </Item>
                 <Item rounded style={styles.input}>
@@ -54,6 +69,28 @@ class Signup extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  ...state.auth,
+  redirectTo: state.common.redirectTo
+});
+
+const mapDispatchToProps = dispatch => ({
+  onChangeEmail: value =>
+    dispatch({ type: UPDATE_FIELD_AUTH, key: 'email', value }),
+  onChangePassword: value =>
+    dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
+  onChangeUsername: value =>
+    dispatch({ type: UPDATE_FIELD_AUTH, key: 'username', value }),
+  onSubmit: (username, email, password) => {
+    const payload = agent.Auth.register(username, email, password);
+    dispatch({ type: REGISTER, payload });
+  },
+  onUnload: () => {
+    dispatch({ type: REGISTER_PAGE_UNLOADED });
+  }
+});
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -85,6 +122,10 @@ const styles = StyleSheet.create({
   header6: {
     fontSize: scale(15),
     fontWeight: 'bold'
+  },
+  header2: {
+    fontSize: scale(20),
+    fontWeight: 'bold'
   }
 });
-export default Signup;
+export default connect()(Signup);
