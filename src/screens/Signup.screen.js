@@ -4,7 +4,7 @@ import { Container, Content, Form, Item, Input, Icon } from 'native-base';
 import GradientButton from '../components/GradientButton';
 import CustomStatusBar from '../components/CustomStatusBar';
 import { scaleVertical, scale } from '../utils/scale';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, SubmissionError } from 'redux-form';
 import { connect } from 'react-redux';
 import {
   REGISTER,
@@ -13,60 +13,90 @@ import {
 } from '../constants/actionTypes';
 import agent from '../agent';
 class Signup extends Component {
-  state = {
-    password: '',
-    confirmPassword: '',
-    errorsList: []
-  };
   constructor(props) {
     super(props);
     this.changeEmail = value => this.props.onChangeEmail(value);
     this.changePassword = value => {
       this.props.onChangePassword(value);
-      this.setState({ password: value });
     };
     this.changeUsername = value => this.props.onChangeUsername(value);
-    this.changeConfirmPassword = value => {
-      this.setState({ confirmPassword: value });
-    };
+    this.renderInput = this.renderInput.bind(this);
+    this.submitForm = this.submitForm.bind(this);
+  }
+  renderInput({
+    input: { onChange, ...restInput },
+    meta: { touched, error, warning },
+    iconName,
+    iconType,
+    placeholder,
+    isSecureField = false
+  }) {
+    var hasError = false;
+    if (error !== undefined) {
+      hasError = true;
+    }
+    return (
+      <Item error={hasError} rounded style={styles.input}>
+        <Icon name={iconName} type={iconType} active />
+        <Input
+          onChangeText={onChange}
+          {...restInput}
+          placeholder={placeholder}
+          secureTextEntry={isSecureField}
+        />
+        {hasError ? <Text style={styles.errorText}>{error}</Text> : <Text />}
+      </Item>
+    );
   }
 
-  isEqualPassword = () => {
-    const { password, confirmPassword } = this.state;
-    if (password !== confirmPassword) {
-      this.setState(preState => {
-        return {
-          ...preState,
-          errorsList: [
-            ...preState.errorsList,
-            {
-              type: 'password',
-              message: `The confirmation password doesn't match password`
-            }
-          ]
-        };
+  submitForm = values => {
+    let username = values.username;
+    let email = values.email;
+    let password = values.password;
+    let confirmPassword = values.confirmPassword;
+
+    if (username.length === 0) {
+      throw new SubmissionError({
+        username: 'Required',
+        _error: 'Sign up failed'
       });
     }
-  };
 
-  renderErrorMessage = () => {
-    const { errorsList } = this.state;
-    let error = errorsList.find(error => error.type === 'password');
-    if (error) {
-      return <Text>{error.message}</Text>;
+    if (email.length === 0) {
+      throw new SubmissionError({
+        email: 'Required',
+        _error: 'Sign up failed'
+      });
     }
-  };
-  submitForm = () => {
-    this.setState(preState => {
-      return {
-        ...preState,
-        errorsList: []
-      };
-    });
-    this.isEqualPassword();
+
+    if (password.length === 0) {
+      throw new SubmissionError({
+        password: 'Required',
+        _error: 'Sign up failed'
+      });
+    }
+
+    if (confirmPassword.length === 0) {
+      throw new SubmissionError({
+        confirmPassword: 'Required',
+        _error: 'Sign up failed'
+      });
+    }
+    if (password !== confirmPassword) {
+      throw new SubmissionError({
+        password: 'Password does not match',
+        confirmPassword: 'Password does not match',
+        _error: 'Sign up failed'
+      });
+    }
+
+    if (!this.props.error) {
+      console.log(values);
+    }
   };
 
   render() {
+    const { handleSubmit } = this.props;
     return (
       <Container style={styles.container}>
         <CustomStatusBar />
@@ -81,35 +111,37 @@ class Signup extends Component {
           <View style={styles.content}>
             <View>
               <Form>
-                <Item rounded style={styles.input}>
-                  <Icon name="user" type="FontAwesome" active />
-                  <Input
-                    placeholder="Username"
-                    onChangeText={this.changeUsername}
-                  />
-                </Item>
-                <Item rounded style={styles.input}>
-                  <Icon name="email" type="MaterialCommunityIcons" active />
-                  <Input placeholder="Email" onChangeText={this.changeEmail} />
-                </Item>
-                <Item rounded style={styles.input}>
-                  <Icon name="lock" type="FontAwesome" active />
-                  <Input
-                    placeholder="Password"
-                    secureTextEntry={true}
-                    onChangeText={this.changePassword}
-                  />
-                </Item>
-                <Item rounded style={styles.input}>
-                  <Icon name="lock" type="FontAwesome" active />
-                  <Input
-                    placeholder="Confirm Password"
-                    secureTextEntry={true}
-                    onChangeText={this.changeConfirmPassword}
-                  />
-                </Item>
-                {this.renderErrorMessage()}
-                <GradientButton onPress={this.submitForm}>
+                <Field
+                  name="username"
+                  component={this.renderInput}
+                  placeholder="Username"
+                  iconName="user"
+                  iconType="FontAwesome"
+                />
+                <Field
+                  name="email"
+                  component={this.renderInput}
+                  placeholder="Email"
+                  iconName="email"
+                  iconType="MaterialCommunityIcons"
+                />
+                <Field
+                  name="password"
+                  component={this.renderInput}
+                  placeholder="Password"
+                  iconName="lock"
+                  iconType="FontAwesome"
+                  isSecureField={true}
+                />
+                <Field
+                  name="confirmPassword"
+                  component={this.renderInput}
+                  placeholder="Confirm Password"
+                  iconName="lock"
+                  iconType="FontAwesome"
+                  isSecureField={true}
+                />
+                <GradientButton onPress={handleSubmit(this.submitForm)}>
                   SIGN UP
                 </GradientButton>
               </Form>
@@ -187,31 +219,39 @@ const styles = StyleSheet.create({
   header2: {
     fontSize: scale(20),
     fontWeight: 'bold'
+  },
+  errorText: {
+    paddingRight: 5,
+    color: 'red'
   }
 });
 
 const validate = values => {
   const error = {};
-  error['email'] = '';
-  error['username'] = '';
-  error['password'] = '';
-  let ema = values.email;
-  let unm = values.username;
-  let pw = values.password;
-  if (values.email === undefined) {
-    ema = '';
+  error.email = '';
+  error.username = '';
+  let email = values.email;
+  let usernmae = values.username;
+  if (email.length < 8 && email !== '') {
+    error.email = 'Too short';
   }
-
-  if (values.username === undefined) {
-    unm = '';
-  }
-
-  if (values.password === undefined) {
-    pw = '';
-  }
-
-  if (!ema.includes('@') && ema !== '') {
+  if (!email.includes('@') && email !== '') {
     error.email = '@ not included';
   }
+  if (usernmae.length > 8) {
+    error.username = 'Max 8 characters';
+  }
+  return error;
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Signup);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  reduxForm({
+    form: 'signup',
+    validate,
+    initialValues: {
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
+    }
+  })(Signup)
+);
