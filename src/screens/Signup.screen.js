@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { Container, Content, Form, Item, Input, Icon } from 'native-base';
+import {
+  Container,
+  Content,
+  Form,
+  Item,
+  Input,
+  Icon,
+  Toast
+} from 'native-base';
 import GradientButton from '../components/GradientButton';
 import CustomStatusBar from '../components/CustomStatusBar';
 import { scaleVertical, scale } from '../utils/scale';
@@ -92,8 +100,23 @@ class Signup extends Component {
 
     if (!this.props.error) {
       console.log(values);
+      this.props.onSubmit(username, email, password);
     }
   };
+
+  renderToast() {
+    const errors = this.props.errors;
+    if (errors) {
+      Object.keys(errors).map(key => {
+        return Toast.show({
+          text: `${key} ${errors[key]}`,
+          buttonText: `OK`,
+          duration: 1000,
+          type: 'danger'
+        });
+      });
+    }
+  }
 
   render() {
     const { handleSubmit } = this.props;
@@ -141,6 +164,7 @@ class Signup extends Component {
                   iconType="FontAwesome"
                   isSecureField={true}
                 />
+                {this.renderToast()}
                 <GradientButton onPress={handleSubmit(this.submitForm)}>
                   SIGN UP
                 </GradientButton>

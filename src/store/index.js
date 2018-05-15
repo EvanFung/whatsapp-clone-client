@@ -7,6 +7,6 @@ import reducer from '../reducers';
 export const store = createStore(
   reducer,
   composeWithDevTools(
-    applyMiddleware(promiseMiddleware, localStorageMiddleware, createLogger())
+    applyMiddleware(promiseMiddleware, localStorageMiddleware)
   )
 );
